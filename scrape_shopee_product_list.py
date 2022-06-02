@@ -1,13 +1,11 @@
-from asyncio import wait_for
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 import selenium.common.exceptions as exception
-from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+from urllib.parse import urlparse, parse_qs, urlencode
+import pandas as pd
 
-PRODUCT_LIST_URL = "https://shopee.co.th/%E0%B9%80%E0%B8%84%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%82%E0%B8%B5%E0%B8%A2%E0%B8%99-col.1017369"  # เครื่องเขียน
 PRODUCT_LIST_URL = "https://shopee.co.th/%E0%B9%80%E0%B8%84%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%82%E0%B8%B5%E0%B8%A2%E0%B8%99-col.1017369?facet=11045875&page=0" # ปากกา
 
 driver = None
@@ -93,11 +91,11 @@ if __name__ == "__main__":
 
 
             product_links.append({
-              "ลิงค์":product_link,
               "ชื่อสินค้า": product_description,
               "ราคา": price_before_discount,
               "ราคาปัจจุบัน": product_price,
               "ยอดขาย": sold,
+              "ลิงค์":product_link,
               "location": location,
               })
 
@@ -109,4 +107,7 @@ if __name__ == "__main__":
 
     print(len(product_links))
 
+    df = pd.DataFrame(product_links)
+    print(df)
+    df.to_excel("product_list.xlsx", index=False)
     driver.quit()
